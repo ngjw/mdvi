@@ -2,4 +2,4 @@
 
 WD=$(dirname $(realpath $0))
 
-PYTHONPATH=${WD}/../python python3 -m mdvi $@
+PYTHONPATH=${WD}/../python python3 -m mdvi.editor $@

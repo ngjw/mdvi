@@ -17,14 +17,11 @@ app = flask.Flask(
 class Previewer:
 
     COND = Condition()
-    TARGET = "mdvi"
     CONTENT = ""
 
     @classmethod
-    def update(cls, file):
+    def update(cls, raw):
         with cls.COND:
-            cls.TARGET = file
-            raw = open(cls.TARGET, 'r').read()
             cls.CONTENT = markdown.markdown(raw)
             cls.COND.notify_all()
 
@@ -44,7 +41,7 @@ class Previewer:
             payload = {
                 'status': 'update',
                 'content': cls.CONTENT,
-                'title': cls.TARGET,
+                'title': 'mdvi',
             }
             yield process(payload)
 
@@ -54,16 +51,22 @@ class Previewer:
 def serve():
     return flask.Response(Previewer.stream(), mimetype='text/event-stream')
 
-@app.route('/update')
+@app.route('/update', methods=['POST'])
 def update():
-    file = flask.request.args.get('file')
-    Previewer.update(file)
-    return file
+    content = flask.request.data.decode()
+    Previewer.update(content)
+    return 'ok'
 
 @app.route('/')
 def index():
     return flask.send_from_directory(STATIC_FOLDER, 'index.html')
 
-def run(port):
-    sys.stdout = sys.stderr = open(os.devnull, 'w')
+def run(port, debug=False):
+
+    if not debug:
+        sys.stdout = sys.stderr = open(os.devnull, 'w')
+
     app.run(host='0.0.0.0', port=port)
+
+if __name__ == '__main__':
+    run(5000, debug=True)
