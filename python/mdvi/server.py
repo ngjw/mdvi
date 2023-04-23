@@ -1,3 +1,5 @@
+import os
+import sys
 import json
 import flask
 import markdown
@@ -60,3 +62,7 @@ def update():
 @app.route('/')
 def index():
     return flask.send_from_directory(STATIC_FOLDER, 'index.html')
+
+def run(port):
+    sys.stdout = sys.stderr = open(os.devnull, 'w')
+    app.run(host='0.0.0.0', port=port)
