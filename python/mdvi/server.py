@@ -17,7 +17,7 @@ app = flask.Flask(
 class Previewer:
 
     COND = Condition()
-    TARGET = None
+    TARGET = "mdvi"
     CONTENT = ""
 
     @classmethod
@@ -44,6 +44,7 @@ class Previewer:
             payload = {
                 'status': 'update',
                 'content': cls.CONTENT,
+                'title': cls.TARGET,
             }
             yield process(payload)
 
