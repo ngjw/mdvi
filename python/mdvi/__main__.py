@@ -1,4 +1,5 @@
 import os
+import socket
 import argparse
 from multiprocessing import Process
 
@@ -14,10 +15,13 @@ p.start()
 
 update_command = f'curl localhost:{pargs.port}/update?file=<afile>'
 
+host = socket.gethostname()
+
 os.system(
     'vim'
     f' --cmd "autocmd BufWritePost * silent !{update_command}"'
     f' --cmd "autocmd BufReadPost * silent !{update_command}"'
+    f' --cmd "echom \'mdvi running on http://{host}:{pargs.port}\'"'
     f' {pargs.file}'
 )
 
