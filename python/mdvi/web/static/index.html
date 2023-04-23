@@ -1,0 +1,28 @@
+<html>
+<head>
+<title></title>
+
+<link rel="stylesheet" type="text/css" href="static/css/markdown.css">
+
+<script>
+
+var stream = new EventSource('/stream')
+stream.onmessage = (message) => {
+
+    var data = JSON.parse(message.data);
+    var display;
+    document.getElementById('content').innerHTML = data.content;
+}
+
+</script>
+
+
+</head>
+
+<body>
+<div id="content">
+</div>
+
+</body>
+
+</html>

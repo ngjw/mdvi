@@ -1,0 +1,5 @@
+#!/bin/bash
+
+WD=$(cd $(dirname $0)/.. && pwd)
+
+PYTHONPATH=${WD}/python python -m mdvi $@
