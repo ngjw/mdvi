@@ -12,7 +12,7 @@ stream.onmessage = (message) => {
     var data = JSON.parse(message.data);
     var display;
     document.getElementById('content').innerHTML = data.content;
-    document.title = data.title;
+    document.title = `mdvi: ${data.title}`;
 }
 
 </script>
