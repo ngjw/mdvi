@@ -22,8 +22,16 @@ class Previewer:
     @classmethod
     def update(cls, raw):
         with cls.COND:
-            cls.CONTENT = markdown.markdown(raw)
+            cls.CONTENT = cls.markdown(raw)
             cls.COND.notify_all()
+
+    @classmethod
+    def markdown(cls, raw):
+        extensions = [
+            'fenced_code',
+            'mdx_math',
+        ]
+        return markdown.markdown(raw, extensions=extensions)
 
     @classmethod
     def wait(cls):

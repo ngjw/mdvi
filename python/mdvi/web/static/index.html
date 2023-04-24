@@ -4,6 +4,16 @@
 
 <link rel="stylesheet" type="text/css" href="static/css/markdown.css">
 
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  config: ["MMLorHTML.js"],
+  jax: ["input/TeX", "output/HTML-CSS", "output/NativeMML"],
+  extensions: ["MathMenu.js", "MathZoom.js"]
+});
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+
 <script>
 
 var stream = new EventSource('/stream')
@@ -21,8 +31,8 @@ stream.onmessage = (message) => {
 </head>
 
 <body>
-<div id="content">
-</div>
+
+<div id="content"></div>
 
 </body>
 
