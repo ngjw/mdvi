@@ -5,6 +5,7 @@ from multiprocessing import Process
 from contextlib import contextmanager
 
 from .server import run
+from .settings import SETTINGS
 
 class Editor:
 
@@ -35,7 +36,9 @@ class Editor:
     @property
     def events(self):
         update_command = f"silent write !curl localhost:{self.port}/update -X POST -H 'Content-Type: application/json\' --data-binary @-"
-        events = ['BufEnter', 'BufWritePost', 'InsertLeave']
+        events = ['BufEnter', 'BufWritePost', 'InsertLeave', 'TextChanged']
+        if SETTINGS.insert_mode_update:
+            events.append('TextChangedI')
         return ' '.join(f' --cmd "autocmd {event} * {update_command}"' for event in events)
 
     def run(self):
@@ -43,6 +46,7 @@ class Editor:
             os.system(f"vim {self.welcome_message} {self.events} {pargs.file}")
 
 if __name__ == '__main__':
+
 
     parser = argparse.ArgumentParser()
     parser.add_argument('file', nargs='?', default='')
