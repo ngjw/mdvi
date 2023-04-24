@@ -23,6 +23,7 @@ stream.onmessage = (message) => {
     var display;
     document.getElementById('content').innerHTML = data.content;
     document.title = `mdvi: ${data.title}`;
+    MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
 }
 
 </script>
