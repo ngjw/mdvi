@@ -74,8 +74,7 @@ def index():
 def run(port, debug=False):
 
     if not debug:
-        #sys.stdout = sys.stderr = open(os.devnull, 'w')
-        sys.stdout = sys.stderr = open('logfile', 'w')
+        sys.stdout = sys.stderr = open(Path.home() / '.mdvi.log', 'w')
 
     app.run(host='0.0.0.0', port=port)
 
