@@ -6,6 +6,8 @@ import markdown
 from pathlib import Path
 from threading import Condition
 
+import mdx_math
+
 CWD = Path(__file__).parent
 
 app = flask.Flask(
@@ -29,7 +31,7 @@ class Previewer:
     def markdown(cls, raw):
         extensions = [
             'fenced_code',
-            'mdx_math',
+            mdx_math.MathExtension(use_gitlab_delimiters=True),
         ]
         return markdown.markdown(raw, extensions=extensions)
 
@@ -72,7 +74,8 @@ def index():
 def run(port, debug=False):
 
     if not debug:
-        sys.stdout = sys.stderr = open(os.devnull, 'w')
+        #sys.stdout = sys.stderr = open(os.devnull, 'w')
+        sys.stdout = sys.stderr = open('logfile', 'w')
 
     app.run(host='0.0.0.0', port=port)
 
