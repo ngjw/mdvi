@@ -1,13 +1,15 @@
-import yaml
 from pathlib import Path
+
+import yaml
+
 
 class Settings(dict):
 
     DEFAULTS = {
-        'insert_mode_update': True,
+        "insert_mode_update": True,
     }
 
-    CONFIG_FILE = Path.home() / '.mdvirc.yaml'
+    CONFIG_FILE = Path.home() / ".mdvirc.yaml"
 
     def __init__(self):
 
@@ -19,6 +21,7 @@ class Settings(dict):
 
     @property
     def insert_mode_update(self):
-        return self['insert_mode_update']
+        return self["insert_mode_update"]
+
 
 SETTINGS = Settings()

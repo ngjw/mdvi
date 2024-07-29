@@ -1,20 +1,21 @@
+import json
 import os
 import sys
-import json
-import flask
-import markdown
 from pathlib import Path
 from threading import Condition
 
+import flask
+import markdown
 import mdx_math
 
 CWD = Path(__file__).parent
 
 app = flask.Flask(
-    'mdvi',
-    static_url_path = '/static',
-    static_folder = (STATIC_FOLDER := CWD / 'web/static'),
+    "mdvi",
+    static_url_path="/static",
+    static_folder=(STATIC_FOLDER := CWD / "web/static"),
 )
+
 
 class Previewer:
 
@@ -30,7 +31,7 @@ class Previewer:
     @classmethod
     def markdown(cls, raw):
         extensions = [
-            'fenced_code',
+            "fenced_code",
             mdx_math.MathExtension(use_gitlab_delimiters=True),
         ]
         return markdown.markdown(raw, extensions=extensions)
@@ -44,39 +45,44 @@ class Previewer:
     @classmethod
     def stream(cls):
 
-        process = lambda x: f'data: {json.dumps(x)}\n\n'
+        process = lambda x: f"data: {json.dumps(x)}\n\n"
 
         while True:
 
             payload = {
-                'status': 'update',
-                'content': cls.CONTENT,
-                'title': 'mdvi',
+                "status": "update",
+                "content": cls.CONTENT,
+                "title": "mdvi",
             }
             yield process(payload)
 
             cls.wait()
 
-@app.route('/stream')
-def serve():
-    return flask.Response(Previewer.stream(), mimetype='text/event-stream')
 
-@app.route('/update', methods=['POST'])
+@app.route("/stream")
+def serve():
+    return flask.Response(Previewer.stream(), mimetype="text/event-stream")
+
+
+@app.route("/update", methods=["POST"])
 def update():
     content = flask.request.data.decode()
     Previewer.update(content)
-    return 'ok'
+    return "ok"
 
-@app.route('/')
+
+@app.route("/")
 def index():
-    return flask.send_from_directory(STATIC_FOLDER, 'index.html')
+    return flask.send_from_directory(STATIC_FOLDER, "index.html")
 
-def run(port, debug=False):
+
+def run(port, debug=False) -> None:
 
     if not debug:
-        sys.stdout = sys.stderr = open(Path.home() / '.mdvi.log', 'w')
+        sys.stdout = sys.stderr = open(Path.home() / ".mdvi.log", "w")
 
-    app.run(host='0.0.0.0', port=port)
+    app.run(host="0.0.0.0", port=port)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     run(5000, debug=True)
